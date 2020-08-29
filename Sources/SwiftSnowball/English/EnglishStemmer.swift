@@ -7,7 +7,7 @@
 
 import Foundation
 
-class EnglishStemmer: Stemmer {
+internal class EnglishStemmer: Stemmer {
     
     func stem(_ word: String, ignoreStopWords: Bool) -> String {
         let lower = word.lowercased().trimmingCharacters(
@@ -26,7 +26,7 @@ class EnglishStemmer: Stemmer {
         
         preprocess(englishWord)
         
-        return ""
+        return englishWord.description
     }
     
     func preprocess(_ word: EnglishWord) {

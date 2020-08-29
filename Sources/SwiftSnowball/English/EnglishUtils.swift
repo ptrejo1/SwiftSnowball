@@ -7,7 +7,7 @@
 
 import Foundation
 
-class EnglishUtils {
+internal class EnglishUtils {
     
     class var vowels: Set<Character> {
         return ["a", "e", "i", "o", "u", "y"]

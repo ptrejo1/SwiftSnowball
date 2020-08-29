@@ -16,7 +16,7 @@ internal protocol Word {
     init(_ word: String)
 }
 
-class StandardWord: Word {
+internal class StandardWord: Word {
     
     var characters: [Character]
     var r1: Int?
@@ -27,11 +27,11 @@ class StandardWord: Word {
         characters = Array(word)
     }
     
-    /// Finds the region after the first non-vowel following a vowel,
-    /// or a the null region at the end of the word if there is no
-    /// such non-vowel.
-    func standardR(start: Int, vowels: Set<Character>) -> Int {
-        for i in 1..<characters.count {
+    /// Finds the region after the first non-vowel following
+    /// a vowel, returns nil if there is no such non-vowel.
+    func standardR(start: Int, vowels: Set<Character>) -> Int? {
+        let end = characters[start...].count - 1
+        for i in stride(from: 1, to: end, by: 1) {
             let j = start + i
             guard
                 vowels.contains(characters[j - 1]),
@@ -40,6 +40,13 @@ class StandardWord: Word {
             return j + 1
         }
         
-        return characters.count
+        return nil
+    }
+}
+
+extension StandardWord: CustomStringConvertible {
+    
+    var description: String {
+        return String(characters)
     }
 }
