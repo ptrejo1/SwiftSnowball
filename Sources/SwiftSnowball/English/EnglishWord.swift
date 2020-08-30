@@ -22,13 +22,11 @@ internal class EnglishWord: StandardWord {
     }
     
     func trimLeadingApostrophes() {
-        var idx = 0
-        for i in 0..<characters.count {
-            guard characters[i] == "'" else { break }
-            idx += 1
+        if let i = characters.firstIndex(where: { $0 != "'" }) {
+            characters = Array(characters[i...])
+        } else {
+            characters = []
         }
-        
-        characters = Array(characters[idx...])
     }
     
     /// Capitalize all 'Y's preceded by vowels or starting a word
@@ -45,15 +43,11 @@ internal class EnglishWord: StandardWord {
     /// Find the starting point of the two regions R1 & R2
     /// See http://snowball.tartarus.org/texts/r1r2.html
     func findR1R2() {
-        let word = String(characters)
+        let word = description
         let specialPrefixes = ["gener", "commun", "arsen"]
-        var prefixIdx = -1
-        for prefix in specialPrefixes {
-            guard word.hasPrefix(prefix) else { continue }
-            prefixIdx = prefix.count
-        }
-        
-        if prefixIdx != -1 {
+        let prefix = specialPrefixes.first { word.hasPrefix($0) }
+
+        if let prefixIdx = prefix?.count {
             r1 = prefixIdx
         } else {
             r1 = standardR(start: 0, vowels: EnglishUtils.vowels)
@@ -61,5 +55,23 @@ internal class EnglishWord: StandardWord {
         
         guard let start = r1 else { return }
         r2 = standardR(start: start, vowels: EnglishUtils.vowels)
+    }
+    
+    private func resetR1R2() {
+        let count = characters.count
+        if let r = r1, r >= count {
+            r1 = nil
+        }
+        if let r = r2, r >= count {
+            r2 = nil
+        }
+        if let r = rv, r >= count {
+            rv = nil
+        }
+    }
+    
+    func dropLast(_ n: Int) {
+        characters = characters.dropLast(n)
+        resetR1R2()
     }
 }

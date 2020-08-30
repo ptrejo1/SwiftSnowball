@@ -8,6 +8,16 @@
 import XCTest
 @testable import SwiftSnowball
 
+fileprivate struct RemoveTest {
+    let input: String
+    let r1Start: Int?
+    let r2Start: Int?
+    let n: Int
+    let output: String
+    let r1Output: Int?
+    let r2Output: Int?
+}
+
 final class EnglishWordTests: XCTestCase {
     
     func testNormalizeApostrophes() {
@@ -51,10 +61,34 @@ final class EnglishWordTests: XCTestCase {
         }
     }
     
+    func testDropLast() {
+        let removeTests = [
+            RemoveTest(input: "aabbccddee", r1Start: 8, r2Start: 9, n: 0,
+                       output: "aabbccddee", r1Output: 8, r2Output: 9),
+            RemoveTest(input: "aabbccddee", r1Start: 8, r2Start: 9, n: 5,
+                       output: "aabbc", r1Output: nil, r2Output: nil),
+            RemoveTest(input: "aabbccddee", r1Start: 8, r2Start: 9, n: 1,
+                       output: "aabbccdde", r1Output: 8, r2Output: nil)
+        ]
+        
+        for removeTest in removeTests {
+            let word = EnglishWord(removeTest.input)
+            word.r1 = removeTest.r1Start
+            word.r2 = removeTest.r2Start
+            word.dropLast(removeTest.n)
+            
+            let str = String(word.characters)
+            XCTAssertEqual(str, removeTest.output)
+            XCTAssertEqual(word.r1, removeTest.r1Output)
+            XCTAssertEqual(word.r2, removeTest.r2Output)
+        }
+    }
+    
     static var allTests = [
         ("testNormalizeApostrophes", testNormalizeApostrophes),
         ("testTrimLeadingApostrophes", testTrimLeadingApostrophes),
         ("testCapitalizeYs", testCapitalizeYs),
         ("testFindR1R2", testFindR1R2),
+        ("testDropLast", testDropLast),
     ]
 }

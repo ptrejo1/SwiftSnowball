@@ -25,6 +25,7 @@ internal class EnglishStemmer: Stemmer {
         let englishWord = EnglishWord(lower)
         
         preprocess(englishWord)
+        step0(englishWord)
         
         return englishWord.description
     }
@@ -34,5 +35,14 @@ internal class EnglishStemmer: Stemmer {
         word.trimLeadingApostrophes()
         word.capitalizeYs()
         word.findR1R2()
+    }
+    
+    func step0(_ word: EnglishWord) {
+        let str = word.description
+        let suffixes = ["'s'", "'s", "'"]
+        let suffix = suffixes.first { str.hasSuffix($0) }
+        
+        guard let count = suffix?.count else { return }
+        word.dropLast(count)
     }
 }
