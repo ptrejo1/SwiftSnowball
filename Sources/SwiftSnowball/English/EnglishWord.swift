@@ -10,7 +10,7 @@ import Foundation
 internal class EnglishWord: StandardWord {
     
     func normalizeApostrophes() {
-        for i in 0..<characters.count {
+        for i in 0..<count {
             guard
                 characters[i] == "\u{2019}" ||
                 characters[i] == "\u{2018}" ||
@@ -58,7 +58,6 @@ internal class EnglishWord: StandardWord {
     }
     
     private func resetR1R2() {
-        let count = characters.count
         if let r = r1, r >= count {
             r1 = nil
         }
@@ -73,5 +72,10 @@ internal class EnglishWord: StandardWord {
     func dropLast(_ n: Int) {
         characters = characters.dropLast(n)
         resetR1R2()
+    }
+    
+    func firstSuffix(in suffixes: [String]) -> String? {
+        let word = description
+        return suffixes.first { word.hasSuffix($0) }
     }
 }

@@ -26,6 +26,7 @@ internal class EnglishStemmer: Stemmer {
         
         preprocess(englishWord)
         step0(englishWord)
+        step1a(englishWord)
         
         return englishWord.description
     }
@@ -38,11 +39,36 @@ internal class EnglishStemmer: Stemmer {
     }
     
     func step0(_ word: EnglishWord) {
-        let str = word.description
         let suffixes = ["'s'", "'s", "'"]
-        let suffix = suffixes.first { str.hasSuffix($0) }
+        let suffix = word.firstSuffix(in: suffixes)
         
         guard let count = suffix?.count else { return }
         word.dropLast(count)
+    }
+    
+    func step1a(_ word: EnglishWord) {
+        let suffixes = ["sses", "ied", "ies", "us", "ss", "s"]
+        let suffix = word.firstSuffix(in: suffixes)
+        
+        switch suffix {
+        case "sses":
+            word.dropLast(2)
+        case "ies", "ied":
+            // replace by i if preceded by more than one letter,
+            // otherwise by ie
+            word.count > 4 ? word.dropLast(2) : word.dropLast(1)
+        case "us", "ss":
+            break
+        case "s":
+            // delete if the preceding word part contains a vowel
+            // not immediately before the s
+            let idx = word.characters.firstIndex {
+                EnglishUtils.isVowel($0)
+            }
+            guard let i = idx, i < word.count - 2 else { break }
+            word.dropLast(1)
+        default:
+            break
+        }
     }
 }

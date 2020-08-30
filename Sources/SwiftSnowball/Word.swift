@@ -23,6 +23,10 @@ internal class StandardWord: Word {
     var r2: Int?
     var rv: Int?
     
+    var count: Int {
+        return characters.count
+    }
+    
     required init(_ word: String) {
         characters = Array(word)
     }

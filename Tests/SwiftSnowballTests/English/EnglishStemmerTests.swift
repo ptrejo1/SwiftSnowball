@@ -49,15 +49,18 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
     }
     
     func testPreprocess() {
-        let stemTests = [
-            StemTest(input: "arguing", output: "arguing"),
-            StemTest(input: "'catty", output: "catty"),
-            StemTest(input: "kyle’s", output: "kyle's"),
-            StemTest(input: "toy", output: "toY")
+        let stepTests = [
+            StepTest(input: "arguing", r1Start: nil, r2Start: nil,
+                     output: "arguing", r1Output: 2, r2Output: 6),
+            StepTest(input: "'catty", r1Start: nil, r2Start: nil,
+                     output: "catty", r1Output: 3, r2Output: nil),
+            StepTest(input: "kyle’s", r1Start: nil, r2Start: nil,
+                     output: "kyle's", r1Output: 3, r2Output: 5),
+            StepTest(input: "toy", r1Start: nil, r2Start: nil,
+                     output: "toY", r1Output: nil, r2Output: nil),
         ]
         
-        // TODO: Convert to step test
-        testStem(with: stemTests)
+        testStep(stemmer.preprocess, with: stepTests)
     }
     
     func testStep0() {
@@ -73,11 +76,27 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
         testStep(stemmer.step0, with: stepTests)
     }
     
+    func testStep1a() {
+        let stepTests = [
+            StepTest(input: "ties", r1Start: 0, r2Start: 0,
+                     output: "tie", r1Output: 0, r2Output: 0),
+            StepTest(input: "cries", r1Start: 0, r2Start: 0,
+                     output: "cri", r1Output: 0, r2Output: 0),
+            StepTest(input: "mistresses", r1Start: 3, r2Start: 7,
+                     output: "mistress", r1Output: 3, r2Output: 7),
+            StepTest(input: "ied", r1Start: 3, r2Start: 3,
+                     output: "ie", r1Output: nil, r2Output: nil),
+        ]
+        
+        testStep(stemmer.step1a, with: stepTests)
+    }
+    
     static var allTests = [
         ("testSmallWords", testSmallWords),
         ("testStopWords", testStopWords),
         ("testSpecialWords", testSpecialWords),
         ("testPreprocess", testPreprocess),
         ("testStep0", testStep0),
+        ("testStep1a", testStep1a),
     ]
 }

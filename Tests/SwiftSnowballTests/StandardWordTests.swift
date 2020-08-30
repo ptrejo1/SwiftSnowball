@@ -26,6 +26,6 @@ final class StandardWordTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testExample", testStandardR),
+        ("testStandardR", testStandardR),
     ]
 }

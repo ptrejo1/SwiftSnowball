@@ -18,6 +18,12 @@ fileprivate struct RemoveTest {
     let r2Output: Int?
 }
 
+fileprivate struct SuffixTest {
+    let word: String
+    let suffixes: [String]
+    let suffix: String?
+}
+
 final class EnglishWordTests: XCTestCase {
     
     func testNormalizeApostrophes() {
@@ -77,10 +83,24 @@ final class EnglishWordTests: XCTestCase {
             word.r2 = removeTest.r2Start
             word.dropLast(removeTest.n)
             
-            let str = String(word.characters)
-            XCTAssertEqual(str, removeTest.output)
+            XCTAssertEqual(word.description, removeTest.output)
             XCTAssertEqual(word.r1, removeTest.r1Output)
             XCTAssertEqual(word.r2, removeTest.r2Output)
+        }
+    }
+    
+    func testFirstSuffix() {
+        let suffixTests = [
+            SuffixTest(word: "firehose", suffixes: ["x", "fi"], suffix: nil),
+            SuffixTest(word: "firehose", suffixes: ["x", "hose", "fi"], suffix: "hose"),
+            SuffixTest(word: "firehose", suffixes: ["x", "se"], suffix: "se"),
+            SuffixTest(word: "firehose", suffixes: ["fire", "xfirehose"], suffix: nil)
+        ]
+        
+        for suffixTest in suffixTests {
+            let word = EnglishWord(suffixTest.word)
+            let suffix = word.firstSuffix(in: suffixTest.suffixes)
+            XCTAssertEqual(suffix, suffixTest.suffix)
         }
     }
     
@@ -90,5 +110,6 @@ final class EnglishWordTests: XCTestCase {
         ("testCapitalizeYs", testCapitalizeYs),
         ("testFindR1R2", testFindR1R2),
         ("testDropLast", testDropLast),
+        ("testFirstSuffix", testFirstSuffix),
     ]
 }
