@@ -27,6 +27,7 @@ internal class EnglishStemmer: Stemmer {
         preprocess(englishWord)
         step0(englishWord)
         step1a(englishWord)
+        step1b(englishWord)
         
         return englishWord.description
     }
@@ -67,6 +68,62 @@ internal class EnglishStemmer: Stemmer {
             }
             guard let i = idx, i < word.count - 2 else { break }
             word.dropLast(1)
+        default:
+            break
+        }
+    }
+    
+    func step1b(_ word: EnglishWord) {
+        let suffixes = ["eedly", "ingly", "edly", "eed", "ing", "ed"]
+        let suffix = word.firstSuffix(in: suffixes)
+        
+        switch suffix {
+        case "eed", "eedly":
+            guard
+                let r1 = word.r1,
+                suffix!.count <= word.count - r1
+            else { break }
+            
+            word.replaceSuffix(suffix!, with: "ee")
+        case "ed", "edly", "ing", "ingly":
+            var isVowelPresent = false
+            let n = word.count - suffix!.count
+            loop: for char in word.characters[..<n] {
+                guard EnglishUtils.isVowel(char) else {
+                    continue
+                }
+                isVowelPresent = true
+                break loop
+            }
+            
+            guard isVowelPresent else { break }
+            
+            let r1 = word.r1
+            let r2 = word.r2
+            word.dropLast(suffix!.count)
+            
+            let newSuffixes = ["at", "bl", "iz"] + EnglishUtils.doubles
+            let newSuffix = word.firstSuffix(in: newSuffixes)
+            
+            switch newSuffix {
+            case "at", "bl", "iz":
+                word.replaceSuffix(newSuffix!, with: newSuffix! + "e")
+            case "bb", "dd", "ff", "gg", "mm", "nn", "pp", "rr", "tt":
+                word.dropLast(1)
+            default:
+                guard word.isShortWord() else { break }
+                word.characters.append("e")
+                word.r1 = nil
+                word.r2 = nil
+                return
+            }
+            
+            if let r = r1, r < word.count {
+                word.r1 = r
+            }
+            if let r = r2, r < word.count {
+                word.r2 = r
+            }
         default:
             break
         }

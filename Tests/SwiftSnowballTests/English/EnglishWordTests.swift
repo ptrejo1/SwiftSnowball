@@ -24,6 +24,28 @@ fileprivate struct SuffixTest {
     let suffix: String?
 }
 
+fileprivate struct SuffixReplaceTest {
+    let input: String
+    let r1Start: Int?
+    let r2Start: Int?
+    let suffix: String
+    let replace: String
+    let output: String
+    let r1Output: Int?
+    let r2Output: Int?
+}
+
+fileprivate struct ShortWordTest {
+    let word: String
+    let isShort: Bool
+}
+
+fileprivate struct ShortSyllableTest {
+    let word: String
+    let position: Int
+    let isShort: Bool
+}
+
 final class EnglishWordTests: XCTestCase {
     
     func testNormalizeApostrophes() {
@@ -104,6 +126,68 @@ final class EnglishWordTests: XCTestCase {
         }
     }
     
+    func testReplaceSuffix() {
+        let suffixReplaceTests = [
+            SuffixReplaceTest(input: "accliviti", r1Start: 2, r2Start: 6,
+                              suffix: "iviti", replace: "ive",
+                              output: "acclive", r1Output: 2, r2Output: 6),
+            SuffixReplaceTest(input: "skating", r1Start: 4, r2Start: 6,
+                              suffix: "ing", replace: "e",
+                              output: "skate", r1Output: 4, r2Output: nil),
+            SuffixReplaceTest(input: "convirtiéndo", r1Start: 3, r2Start: 6,
+                              suffix: "iéndo", replace: "iendo",
+                              output: "convirtiendo", r1Output: 3, r2Output: 6)
+        ]
+        
+        for suffixReplaceTest in suffixReplaceTests {
+            let word = EnglishWord(suffixReplaceTest.input)
+            word.r1 = suffixReplaceTest.r1Start
+            word.r2 = suffixReplaceTest.r2Start
+            word.replaceSuffix(suffixReplaceTest.suffix,
+                               with: suffixReplaceTest.replace)
+            
+            XCTAssertEqual(word.description, suffixReplaceTest.output)
+            XCTAssertEqual(word.r1, suffixReplaceTest.r1Output)
+            XCTAssertEqual(word.r2, suffixReplaceTest.r2Output)
+        }
+    }
+    
+    func testIsShortWord() {
+        let shortWordTests = [
+            ShortWordTest(word: "bed", isShort: true),
+            ShortWordTest(word: "shed", isShort: true),
+            ShortWordTest(word: "shred", isShort: true),
+            ShortWordTest(word: "bead", isShort: true),
+            ShortWordTest(word: "embed", isShort: true),
+            ShortWordTest(word: "beds", isShort: true)
+        ]
+        
+        for shortWordTest in shortWordTests {
+            let word = EnglishWord(shortWordTest.word)
+            let isShort = word.isShortWord()
+            XCTAssertEqual(isShort, shortWordTest.isShort)
+        }
+    }
+    
+    func testEndsInShortSyllable() {
+        let shortSyllableTests = [
+            ShortSyllableTest(word: "absolute", position: 7, isShort: true),
+            ShortSyllableTest(word: "ape", position: 2, isShort: true),
+            ShortSyllableTest(word: "rap", position: 3, isShort: true),
+            ShortSyllableTest(word: "trap", position: 4, isShort: true),
+            ShortSyllableTest(word: "entrap", position: 6, isShort: true),
+            ShortSyllableTest(word: "uproot", position: 6, isShort: false),
+            ShortSyllableTest(word: "bestow", position: 6, isShort: false),
+            ShortSyllableTest(word: "disturb", position: 7, isShort: false)
+        ]
+        
+        for shortSyllableTest in shortSyllableTests {
+            let word = EnglishWord(shortSyllableTest.word)
+            let isShort = word.endsInShortSyllable(at: shortSyllableTest.position)
+            XCTAssertEqual(isShort, shortSyllableTest.isShort)
+        }
+    }
+    
     static var allTests = [
         ("testNormalizeApostrophes", testNormalizeApostrophes),
         ("testTrimLeadingApostrophes", testTrimLeadingApostrophes),
@@ -111,5 +195,8 @@ final class EnglishWordTests: XCTestCase {
         ("testFindR1R2", testFindR1R2),
         ("testDropLast", testDropLast),
         ("testFirstSuffix", testFirstSuffix),
+        ("testReplaceSuffix", testReplaceSuffix),
+        ("testIsShortWord", testIsShortWord),
+        ("testEndsInShortSyllable", testEndsInShortSyllable),
     ]
 }

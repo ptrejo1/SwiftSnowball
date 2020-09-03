@@ -91,6 +91,33 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
         testStep(stemmer.step1a, with: stepTests)
     }
     
+    func testStep1b() {
+        let stepTests = [
+            StepTest(input: "exxeedly", r1Start: 1, r2Start: 8,
+                     output: "exxee", r1Output: 1, r2Output: nil),
+            StepTest(input: "exxeed", r1Start: 1, r2Start: 7,
+                     output: "exxee", r1Output: 1, r2Output: nil),
+            StepTest(input: "luxuriated", r1Start: 3, r2Start: 5,
+                     output: "luxuriate", r1Output: 3, r2Output: 5),
+            StepTest(input: "luxuribled", r1Start: 3, r2Start: 5,
+                     output: "luxurible", r1Output: 3, r2Output: 5),
+            StepTest(input: "luxuriized", r1Start: 3, r2Start: 5,
+                     output: "luxuriize", r1Output: 3, r2Output: 5),
+            StepTest(input: "luxuriedly", r1Start: 3, r2Start: 5,
+                     output: "luxuri", r1Output: 3, r2Output: 5),
+            StepTest(input: "vetted", r1Start: 3, r2Start: 6,
+                     output: "vet", r1Output: nil, r2Output: nil),
+            StepTest(input: "hopping", r1Start: 3, r2Start: 7,
+                     output: "hop", r1Output: nil, r2Output: nil),
+            StepTest(input: "breed", r1Start: nil, r2Start: nil,
+                     output: "breed", r1Output: nil, r2Output: nil),
+            StepTest(input: "skating", r1Start: 4, r2Start: 6,
+                     output: "skate", r1Output: 4, r2Output: nil)
+        ]
+        
+        testStep(stemmer.step1b, with: stepTests)
+    }
+    
     static var allTests = [
         ("testSmallWords", testSmallWords),
         ("testStopWords", testStopWords),
@@ -98,5 +125,6 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
         ("testPreprocess", testPreprocess),
         ("testStep0", testStep0),
         ("testStep1a", testStep1a),
+        ("testStep1b", testStep1b),
     ]
 }

@@ -78,6 +78,10 @@ internal class EnglishUtils {
         ]
     }
     
+    class var doubles: [String] {
+        return ["bb", "dd", "ff", "gg", "mm", "nn", "pp", "rr", "tt"]
+    }
+    
     class func isStopWord(_ word: String) -> Bool {
         return stopWords.contains(word)
     }

@@ -78,4 +78,41 @@ internal class EnglishWord: StandardWord {
         let word = description
         return suffixes.first { word.hasSuffix($0) }
     }
+    
+    func replaceSuffix(_ suffix: String, with newSuffix: String) {
+        guard description.hasSuffix(suffix) else { return }
+        
+        characters = characters.dropLast(suffix.count)
+        characters += Array(newSuffix)
+        resetR1R2()
+    }
+    
+    func isShortWord() -> Bool {
+        guard r1 == nil else { return false }
+        return endsInShortSyllable(at: count)
+    }
+    
+    /// - Parameter ending: Index to cutoff at
+    func endsInShortSyllable(at ending: Int) -> Bool {
+        if ending == 2 {
+            return
+                EnglishUtils.isVowel(characters[0]) &&
+                    !EnglishUtils.isVowel(characters[1])
+                ? true : false
+        } else if ending > 2 {
+            let e1 = characters[ending - 1]
+            let e2 = characters[ending - 2]
+            let e3 = characters[ending - 3]
+            let specialNonVowels: [Character] = ["w", "x", "Y"]
+            
+            let isShort = !EnglishUtils.isVowel(e1) &&
+                !specialNonVowels.contains(e1) &&
+                EnglishUtils.isVowel(e2) &&
+                !EnglishUtils.isVowel(e3)
+            
+            return isShort ? true : false
+        }
+        
+        return false
+    }
 }
