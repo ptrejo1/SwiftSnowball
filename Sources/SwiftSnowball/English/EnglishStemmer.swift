@@ -28,6 +28,7 @@ internal class EnglishStemmer: Stemmer {
         step0(englishWord)
         step1a(englishWord)
         step1b(englishWord)
+        step1c(englishWord)
         
         return englishWord.description
     }
@@ -127,5 +128,17 @@ internal class EnglishStemmer: Stemmer {
         default:
             break
         }
+    }
+    
+    func step1c(_ word: EnglishWord) {
+        let n = word.count
+        guard
+            word.count > 2,
+            (word.characters[n - 1] == "y" ||
+                word.characters[n - 1] == "Y"),
+            !EnglishUtils.isVowel(word.characters[n - 2])
+        else { return }
+        
+        word.characters[n - 1] = "i"
     }
 }

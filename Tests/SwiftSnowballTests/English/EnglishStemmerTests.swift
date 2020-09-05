@@ -118,6 +118,21 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
         testStep(stemmer.step1b, with: stepTests)
     }
     
+    func testStep1c() {
+        let stepTests = [
+            StepTest(input: "cry", r1Start: 3, r2Start: 3,
+                     output: "cri", r1Output: 3, r2Output: 3),
+            StepTest(input: "say", r1Start: 3, r2Start: 3,
+                     output: "say", r1Output: 3, r2Output: 3),
+            StepTest(input: "by", r1Start: 2, r2Start: 2,
+                     output: "by", r1Output: 2, r2Output: 2),
+            StepTest(input: "xexby", r1Start: 2, r2Start: 5,
+                     output: "xexbi", r1Output: 2, r2Output: 5)
+        ]
+        
+        testStep(stemmer.step1c, with: stepTests)
+    }
+    
     static var allTests = [
         ("testSmallWords", testSmallWords),
         ("testStopWords", testStopWords),
@@ -126,5 +141,6 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
         ("testStep0", testStep0),
         ("testStep1a", testStep1a),
         ("testStep1b", testStep1b),
+        ("testStep1c", testStep1c),
     ]
 }
