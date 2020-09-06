@@ -157,13 +157,14 @@ final class EnglishWordTests: XCTestCase {
             ShortWordTest(word: "bed", isShort: true),
             ShortWordTest(word: "shed", isShort: true),
             ShortWordTest(word: "shred", isShort: true),
-            ShortWordTest(word: "bead", isShort: true),
-            ShortWordTest(word: "embed", isShort: true),
-            ShortWordTest(word: "beds", isShort: true)
+            ShortWordTest(word: "bead", isShort: false),
+            ShortWordTest(word: "embed", isShort: false),
+            ShortWordTest(word: "beds", isShort: false)
         ]
         
         for shortWordTest in shortWordTests {
             let word = EnglishWord(shortWordTest.word)
+            word.findR1R2()
             let isShort = word.isShortWord()
             XCTAssertEqual(isShort, shortWordTest.isShort)
         }

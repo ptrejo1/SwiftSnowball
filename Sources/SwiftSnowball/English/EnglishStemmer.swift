@@ -29,6 +29,7 @@ internal class EnglishStemmer: Stemmer {
         step1a(englishWord)
         step1b(englishWord)
         step1c(englishWord)
+        step2(englishWord)
         
         return englishWord.description
     }
@@ -140,5 +141,81 @@ internal class EnglishStemmer: Stemmer {
         else { return }
         
         word.characters[n - 1] = "i"
+    }
+    
+    func step2(_ word: EnglishWord) {
+        let suffixes = [
+            "ational", "fulness", "iveness", "ization", "ousness",
+            "biliti", "lessli", "tional", "alism", "aliti", "ation",
+            "entli", "fulli", "iviti", "ousli", "anci", "abli",
+            "alli", "ator", "enci", "izer", "bli", "ogi", "li"
+        ]
+        
+        guard
+            let suffix = word.firstSuffix(in: suffixes),
+            let r1 = word.r1,
+            suffix.count <= word.count - r1
+        else { return }
+        
+        switch suffix {
+        case "li":
+            let count = word.count
+            let chars: [Character] = [
+                "c", "d", "e", "g", "h",
+                "k", "m", "n", "r", "t"
+            ]
+            guard
+                count >= 3,
+                chars.contains(word.characters[count - 3])
+            else { break }
+            
+            word.dropLast(suffix.count)
+        case "ogi":
+            let count = word.count
+            guard
+                count >= 4,
+                word.characters[count - 4] == "l"
+            else { break }
+            
+            word.replaceSuffix(suffix, with: "og")
+        default:
+            break
+        }
+        
+        var replace = ""
+        switch suffix {
+        case "tional":
+            replace = "tion"
+        case "enci":
+            replace = "ence"
+        case "anci":
+            replace = "ance"
+        case "abli":
+            replace = "able"
+        case "entli":
+            replace = "ent"
+        case "izer", "ization":
+            replace = "ize"
+        case "ational", "ation", "ator":
+            replace = "ate"
+        case "alism", "aliti", "alli":
+            replace = "al"
+        case "fulness":
+            replace = "ful"
+        case "ousli", "ousness":
+            replace = "ous"
+        case "iveness", "iviti":
+            replace = "ive"
+        case "biliti", "bli":
+            replace = "ble"
+        case "fulli":
+            replace = "ful"
+        case "lessli":
+            replace = "less"
+        default:
+            return
+        }
+        
+        word.replaceSuffix(suffix, with: replace)
     }
 }
