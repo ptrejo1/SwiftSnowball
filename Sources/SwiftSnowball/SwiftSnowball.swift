@@ -4,11 +4,11 @@ internal protocol Stemmer {
 
 public enum Language {
     
-    case English
+    case english
     
-    var stemmer: Stemmer {
+    internal var stemmer: Stemmer {
         switch self {
-        case .English:
+        case .english:
             return EnglishStemmer()
         }
     }

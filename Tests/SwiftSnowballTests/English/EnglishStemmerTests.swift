@@ -272,5 +272,6 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
         ("testStep2", testStep2),
         ("testStep4", testStep4),
         ("testStep5", testStep5),
+        ("testStem", testStem),
     ]
 }

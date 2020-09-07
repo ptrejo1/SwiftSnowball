@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import SwiftCSV
 @testable import SwiftSnowball
 
 typealias Step<U: Word> = (_ word: U) -> Void
@@ -29,6 +30,11 @@ struct R1R2Test {
     let word: String
     let r1: Int?
     let r2: Int?
+}
+
+struct VocabTest {
+    let input: String
+    let output: String
 }
 
 class StemmerTestCase<T: Stemmer>: XCTestCase {
@@ -56,6 +62,20 @@ class StemmerTestCase<T: Stemmer>: XCTestCase {
             XCTAssertEqual(str, stepTest.output)
             XCTAssertEqual(word.r1, stepTest.r1Output)
             XCTAssertEqual(word.r2, stepTest.r2Output)
+        }
+    }
+}
+
+class VocabTestCase: XCTestCase {
+    
+    func testVocab(_ language: Language, csv: String) {
+        let csvFile = String(#file.dropLast(18)) + "Vocabs/\(csv)"
+        let csv = try! CSV(url: URL(fileURLWithPath: csvFile))
+        let stemmer = SnowballStemmer(language: language)
+        
+        for row in csv.enumeratedRows {
+            let stemmed = stemmer.stem(row[0], stemStopWords: true)
+            XCTAssertEqual(stemmed, row[1])
         }
     }
 }
