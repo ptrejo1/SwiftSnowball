@@ -32,6 +32,7 @@ internal class EnglishStemmer: Stemmer {
         step2(englishWord)
         step3(englishWord)
         step4(englishWord)
+        step5(englishWord)
         
         return englishWord.description
     }
@@ -289,5 +290,27 @@ internal class EnglishStemmer: Stemmer {
         }
         
         word.dropLast(suffix.count)
+    }
+    
+    func step5(_ word: EnglishWord) {
+        let lastCharIdx = word.count - 1
+        
+        guard let r1 = word.r1, r1 <= lastCharIdx else {
+            return
+        }
+        
+        if word.characters[lastCharIdx] == "e" {
+            if let r2 = word.r2, r2 <= lastCharIdx {
+                word.dropLast(1)
+            } else if !word.endsInShortSyllable(at: lastCharIdx) {
+                word.dropLast(1)
+            }
+        } else if word.characters[lastCharIdx] == "l",
+            lastCharIdx - 1 >= 0,
+            word.characters[lastCharIdx - 1] == "l",
+            let r2 = word.r2,
+            r2 <= lastCharIdx {
+            word.dropLast(1)
+        }
     }
 }
