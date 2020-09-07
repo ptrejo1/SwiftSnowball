@@ -30,6 +30,7 @@ internal class EnglishStemmer: Stemmer {
         step1b(englishWord)
         step1c(englishWord)
         step2(englishWord)
+        step3(englishWord)
         
         return englishWord.description
     }
@@ -212,6 +213,46 @@ internal class EnglishStemmer: Stemmer {
             replace = "ful"
         case "lessli":
             replace = "less"
+        default:
+            return
+        }
+        
+        word.replaceSuffix(suffix, with: replace)
+    }
+    
+    func step3(_ word: EnglishWord) {
+        let suffixes = [
+            "ational", "tional", "alize", "icate", "ative",
+            "iciti", "ical", "ful", "ness"
+        ]
+        
+        guard
+            let suffix = word.firstSuffix(in: suffixes),
+            let r1 = word.r1,
+            suffix.count <= word.count - r1
+        else { return }
+        
+        guard
+            suffix != "ative",
+            let r2 = word.r2,       // check if in r2
+            word.count - r2 < 5     // 5 = len of ative
+        else {
+            word.dropLast(suffix.count)
+            return
+        }
+        
+        var replace = ""
+        switch suffix {
+        case "ational":
+            replace = "ate"
+        case "tional":
+            replace = "tion"
+        case "alize":
+            replace = "al"
+        case "icate", "iciti", "ical":
+            replace = "ic"
+        case "ful", "ness":
+            replace = ""
         default:
             return
         }
