@@ -31,6 +31,7 @@ internal class EnglishStemmer: Stemmer {
         step1c(englishWord)
         step2(englishWord)
         step3(englishWord)
+        step4(englishWord)
         
         return englishWord.description
     }
@@ -241,6 +242,13 @@ internal class EnglishStemmer: Stemmer {
             return
         }
         
+        if suffix == "active",
+            let r2 = word.r2,
+            word.count - r2 >= suffix.count {
+            word.dropLast(suffix.count)
+            return
+        }
+        
         var replace = ""
         switch suffix {
         case "ational":
@@ -258,5 +266,28 @@ internal class EnglishStemmer: Stemmer {
         }
         
         word.replaceSuffix(suffix, with: replace)
+    }
+    
+    func step4(_ word: EnglishWord) {
+        let suffixes = [
+            "ement", "ance", "ence", "able", "ible", "ment",
+            "ent", "ant", "ism", "ate", "iti", "ous", "ive",
+            "ize", "ion", "al", "er", "ic",
+        ]
+        
+        guard
+            let suffix = word.firstSuffix(in: suffixes),
+            let r2 = word.r2,
+            suffix.count <= word.count - r2
+        else { return }
+        
+        if suffix == "ion",
+            word.count >= 4,
+            ["s", "t"].contains(word.characters[word.count - 4]) {
+            word.dropLast(suffix.count)
+            return
+        }
+        
+        word.dropLast(suffix.count)
     }
 }
