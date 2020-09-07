@@ -1,5 +1,5 @@
 internal protocol Stemmer {
-    func stem(_ word: String, ignoreStopWords: Bool) -> String
+    func stem(_ word: String, stemStopWords: Bool) -> String
 }
 
 public enum Language {
@@ -24,8 +24,8 @@ public class SnowballStemmer {
         stemmer = language.stemmer
     }
     
-    func stem(_ word: String, ignoreStopWords: Bool = false) -> String {
+    func stem(_ word: String, stemStopWords: Bool = false) -> String {
         guard !word.isEmpty else { return "" }
-        return stemmer.stem(word, ignoreStopWords: ignoreStopWords)
+        return stemmer.stem(word, stemStopWords: stemStopWords)
     }
 }

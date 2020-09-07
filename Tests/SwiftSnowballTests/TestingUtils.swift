@@ -12,6 +12,7 @@ typealias Step<U: Word> = (_ word: U) -> Void
 
 struct StemTest {
     let input: String
+    let stemStopWords: Bool
     let output: String
 }
 
@@ -36,7 +37,10 @@ class StemmerTestCase<T: Stemmer>: XCTestCase {
     
     func testStem(with stemTests: [StemTest]) {
         for stemTest in stemTests {
-            let word = stemmer.stem(stemTest.input, ignoreStopWords: false)
+            let word = stemmer.stem(
+                stemTest.input,
+                stemStopWords: stemTest.stemStopWords
+            )
             XCTAssertEqual(word, stemTest.output)
         }
     }

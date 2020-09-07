@@ -9,11 +9,11 @@ import Foundation
 
 internal class EnglishStemmer: Stemmer {
     
-    func stem(_ word: String, ignoreStopWords: Bool) -> String {
+    func stem(_ word: String, stemStopWords: Bool) -> String {
         let lower = word.lowercased().trimmingCharacters(
             in: .whitespacesAndNewlines)
         
-        if lower.count <= 2 || (!ignoreStopWords &&
+        if lower.count <= 2 || (!stemStopWords &&
             EnglishUtils.isStopWord(lower)) {
             return lower
         }

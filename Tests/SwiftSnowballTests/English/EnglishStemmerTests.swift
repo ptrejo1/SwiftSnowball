@@ -20,9 +20,9 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
     
     func testSmallWords() {
         let stemTests = [
-            StemTest(input: "A", output: "a"),
-            StemTest(input: "al", output: "al"),
-            StemTest(input: " a ", output: "a")
+            StemTest(input: "A", stemStopWords: false, output: "a"),
+            StemTest(input: "al", stemStopWords: false, output: "al"),
+            StemTest(input: " a ", stemStopWords: false, output: "a")
         ]
         
         testStem(with: stemTests)
@@ -30,9 +30,9 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
     
     func testStopWords() {
         let stemTests = [
-            StemTest(input: "a", output: "a"),
-            StemTest(input: "but", output: "but"),
-            StemTest(input: "the", output: "the")
+            StemTest(input: "a", stemStopWords: false, output: "a"),
+            StemTest(input: "but", stemStopWords: false, output: "but"),
+            StemTest(input: "the", stemStopWords: false, output: "the")
         ]
         
         testStem(with: stemTests)
@@ -40,9 +40,9 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
     
     func testSpecialWords() {
         let stemTests = [
-            StemTest(input: "skis", output: "ski"),
-            StemTest(input: "idly", output: "idl"),
-            StemTest(input: "cannings", output: "canning")
+            StemTest(input: "skis", stemStopWords: false, output: "ski"),
+            StemTest(input: "idly", stemStopWords: false, output: "idl"),
+            StemTest(input: "cannings", stemStopWords: false, output: "canning")
         ]
         
         testStem(with: stemTests)
@@ -234,6 +234,30 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
         ]
         
         testStep(stemmer.step5, with: stepTests)
+    }
+    
+    func testStem() {
+        let stemTests = [
+            StemTest(input: "aberration", stemStopWords: true, output: "aberr"),
+            StemTest(input: "abruptness", stemStopWords: true, output: "abrupt"),
+            StemTest(input: "absolute", stemStopWords: true, output: "absolut"),
+            StemTest(input: "abated", stemStopWords: true, output: "abat"),
+            StemTest(input: "acclivity", stemStopWords: true, output: "accliv"),
+            StemTest(input: "accumulations", stemStopWords: true, output: "accumul"),
+            StemTest(input: "agreement", stemStopWords: true, output: "agreement"),
+            StemTest(input: "breed", stemStopWords: true, output: "breed"),
+            StemTest(input: "ape", stemStopWords: true, output: "ape"),
+            StemTest(input: "skating", stemStopWords: true, output: "skate"),
+            StemTest(input: "fluently", stemStopWords: true, output: "fluentli"),
+            StemTest(input: "ied", stemStopWords: true, output: "ie"),
+            StemTest(input: "ies", stemStopWords: true, output: "ie"),
+            StemTest(input: "because", stemStopWords: true, output: "becaus"),
+            StemTest(input: "because", stemStopWords: false, output: "because"),
+            StemTest(input: "above", stemStopWords: true, output: "abov"),
+            StemTest(input: "above", stemStopWords: false, output: "above")
+        ]
+        
+        testStem(with: stemTests)
     }
     
     static var allTests = [
