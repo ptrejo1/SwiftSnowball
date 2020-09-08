@@ -8,7 +8,6 @@
 import XCTest
 @testable import SwiftSnowball
 
-
 final class EnglishVocabTests: VocabTestCase {
     
     func testEnglishVocab() {
@@ -16,6 +15,6 @@ final class EnglishVocabTests: VocabTestCase {
     }
     
     static var allTests = [
-        ("testVocab", testEnglishVocab),
+        ("testEnglishVocab", testEnglishVocab),
     ]
 }

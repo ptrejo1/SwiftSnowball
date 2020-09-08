@@ -61,14 +61,10 @@ internal class EnglishStemmer: Stemmer {
         case "sses":
             word.dropLast(2)
         case "ies", "ied":
-            // replace by i if preceded by more than one letter,
-            // otherwise by ie
             word.count > 4 ? word.dropLast(2) : word.dropLast(1)
         case "us", "ss":
             break
         case "s":
-            // delete if the preceding word part contains a vowel
-            // not immediately before the s
             let idx = word.characters.firstIndex {
                 EnglishUtils.isVowel($0)
             }
@@ -235,16 +231,7 @@ internal class EnglishStemmer: Stemmer {
             suffix.count <= word.count - r1
         else { return }
         
-        guard
-            suffix != "ative",
-            let r2 = word.r2,       // check if in r2
-            word.count - r2 < 5     // 5 = len of ative
-        else {
-            word.dropLast(suffix.count)
-            return
-        }
-        
-        if suffix == "active",
+        if suffix == "ative",
             let r2 = word.r2,
             word.count - r2 >= suffix.count {
             word.dropLast(suffix.count)
@@ -283,9 +270,12 @@ internal class EnglishStemmer: Stemmer {
             suffix.count <= word.count - r2
         else { return }
         
-        if suffix == "ion",
-            word.count >= 4,
-            ["s", "t"].contains(word.characters[word.count - 4]) {
+        if suffix == "ion" {
+            guard
+                word.count >= 4,
+                ["s", "t"].contains(word.characters[word.count - 4])
+            else { return }
+            
             word.dropLast(suffix.count)
             return
         }
