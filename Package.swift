@@ -25,5 +25,6 @@ let package = Package(
         .testTarget(
             name: "SwiftSnowballTests",
             dependencies: ["SwiftSnowball", "SwiftCSV"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )

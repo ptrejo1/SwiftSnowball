@@ -16,7 +16,7 @@ public enum Language {
 
 public class SnowballStemmer {
     
-    let language: Language
+    public let language: Language
     private let stemmer: Stemmer
     
     public init(language: Language) {
@@ -24,7 +24,7 @@ public class SnowballStemmer {
         stemmer = language.stemmer
     }
     
-    func stem(_ word: String, stemStopWords: Bool = false) -> String {
+    public func stem(_ word: String, stemStopWords: Bool = false) -> String {
         guard !word.isEmpty else { return "" }
         return stemmer.stem(word, stemStopWords: stemStopWords)
     }
