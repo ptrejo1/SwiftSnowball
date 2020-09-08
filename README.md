@@ -1,6 +1,7 @@
 # SwiftSnowball
 
 ![Swift 5.0](https://img.shields.io/badge/Swift-5.0-blue.svg?style=flat)
+[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ptrejo1/SwiftSnowball/blob/master/LICENSE) 
 
 A Swift implementation of the Snowball stemmer
 
