@@ -115,4 +115,11 @@ internal class EnglishWord: StandardWord {
         
         return false
     }
+    
+    func uncapitalizeYs() {
+        for i in 0..<count {
+            guard characters[i] == "Y" else { continue }
+            characters[i] = "y"
+        }
+    }
 }

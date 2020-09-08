@@ -33,6 +33,7 @@ internal class EnglishStemmer: Stemmer {
         step3(englishWord)
         step4(englishWord)
         step5(englishWord)
+        postprocess(englishWord)
         
         return englishWord.description
     }
@@ -312,5 +313,9 @@ internal class EnglishStemmer: Stemmer {
             r2 <= lastCharIdx {
             word.dropLast(1)
         }
+    }
+    
+    func postprocess(_ word: EnglishWord) {
+        word.uncapitalizeYs()
     }
 }
