@@ -37,11 +37,9 @@ struct VocabTest {
     let output: String
 }
 
-class StemmerTestCase<T: Stemmer>: XCTestCase {
+class StemmerTestCase: XCTestCase {
     
-    var stemmer: T!
-    
-    func testStem(with stemTests: [StemTest]) {
+    func testStem(_ stemmer: Stemmer, with stemTests: [StemTest]) {
         for stemTest in stemTests {
             let word = stemmer.stem(
                 stemTest.input,

@@ -8,7 +8,9 @@
 import XCTest
 @testable import SwiftSnowball
 
-final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
+final class EnglishStemmerTests: StemmerTestCase {
+
+    var stemmer: EnglishStemmer!
     
     override func setUp() {
         stemmer = EnglishStemmer()
@@ -25,7 +27,7 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
             StemTest(input: " a ", stemStopWords: false, output: "a")
         ]
         
-        testStem(with: stemTests)
+        testStem(stemmer, with: stemTests)
     }
     
     func testStopWords() {
@@ -35,7 +37,7 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
             StemTest(input: "the", stemStopWords: false, output: "the")
         ]
         
-        testStem(with: stemTests)
+        testStem(stemmer, with: stemTests)
     }
     
     func testSpecialWords() {
@@ -45,7 +47,7 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
             StemTest(input: "cannings", stemStopWords: false, output: "canning")
         ]
         
-        testStem(with: stemTests)
+        testStem(stemmer, with: stemTests)
     }
     
     func testPreprocess() {
@@ -257,7 +259,7 @@ final class EnglishStemmerTests: StemmerTestCase<EnglishStemmer> {
             StemTest(input: "above", stemStopWords: false, output: "above")
         ]
         
-        testStem(with: stemTests)
+        testStem(stemmer, with: stemTests)
     }
     
     static var allTests = [

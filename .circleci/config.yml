@@ -1,0 +1,13 @@
+version: 2.1
+jobs:
+
+  build:
+    macos:
+      xcode: "11.7.0"
+
+    steps:
+      - checkout
+
+      - run:
+          name: run tests
+          command: swift test
