@@ -3,6 +3,7 @@
 ![Swift 5.0](https://img.shields.io/badge/Swift-5.0-blue.svg?style=flat)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ptrejo1/SwiftSnowball/blob/master/LICENSE) 
 [![CircleCI](https://circleci.com/gh/ptrejo1/SwiftSnowball.svg?style=shield)](https://app.circleci.com/pipelines/github/ptrejo1/SwiftSnowball)
+[![codecov](https://codecov.io/gh/ptrejo1/SwiftSnowball/branch/master/graph/badge.svg)](https://codecov.io/gh/ptrejo1/SwiftSnowball)
 
 A Swift implementation of the Snowball stemmer
 
