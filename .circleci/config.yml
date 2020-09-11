@@ -10,4 +10,11 @@ jobs:
 
       - run:
           name: run tests
-          command: swift test
+          command: |
+            swift test --enable-code-coverage
+            xcrun llvm-cov export -format="lcov" .build/debug/SwiftSnowballPackageTests.xctest/Contents/MacOS/SwiftSnowballPackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
+
+
+      - run:
+          name: send coverage report
+          command: bash <(curl -s https://codecov.io/bash)
